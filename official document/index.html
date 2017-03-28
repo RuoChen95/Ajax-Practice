@@ -1,3 +1,8 @@
+<!--
+the implement of https://developer.mozilla.org/en-US/docs/AJAX/Getting_Started
+-->
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,15 +10,27 @@
 	<meta charset="utf-8">
 </head>
 <body>
+<!--
+	<span id="ajaxButton" style="cursor: pointer; text-decoration: underline">
+	  Make a request
+	</span>
+-->
+	<label>Your name: 
+	  <input type="text" id="ajaxTextbox" />
+	</label>
 	<span id="ajaxButton" style="cursor: pointer; text-decoration: underline">
 	  Make a request
 	</span>
 	<script type="text/javascript">
-	(function() {
+	//Step 3 – A Simple Example
+	//because the function names are same, so I have to commened step 3
+	/*
+
 	  var httpRequest;
-	  document.getElementById("ajaxButton").onclick = function() { makeRequest('test.html'); };
+	  document.getElementById("ajaxButton").onclick = function() { makeRequest('test.xml'); };
 
 	  function makeRequest(url) {
+
 	    httpRequest = new XMLHttpRequest();
 
 	    if (!httpRequest) {
@@ -28,13 +45,45 @@
 	  function alertContents() {
 	    if (httpRequest.readyState === XMLHttpRequest.DONE) {
 	      if (httpRequest.status === 200) {
-	        alert(httpRequest.responseText);
+	        var xmldoc = httpRequest.responseXML;
+			var root_node = xmldoc.getElementsByTagName('root').item(0);
+			alert(root_node.firstChild.data);
 	      } else {
 	        alert('There was a problem with the request.');
 	      }
 	    }
 	  }
-	})();
+	
+	*/
+	//Step 5 – Working with data
+	document.getElementById("ajaxButton").onclick = function() { 
+		var userName = document.getElementById("ajaxTextbox").value;
+    	makeRequest('test.php',userName); 
+    };	
+  	function makeRequest(url, userName) {
+
+    	httpRequest = new XMLHttpRequest();
+
+	    if (!httpRequest) {
+	      alert('Giving up :( Cannot create an XMLHTTP instance');
+	      return false;
+	    }
+	    httpRequest.onreadystatechange = alertContents;
+	    httpRequest.open('POST', url);
+	    httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	    httpRequest.send('userName=' + encodeURIComponent(userName));
+	}
+	function alertContents() {
+	  if (httpRequest.readyState === XMLHttpRequest.DONE) {
+	    if (httpRequest.status === 200) {
+	    //there are some problems in the httpRequest.responseText
+	      var response = JSON.parse(httpRequest.responseText); 
+	      alert(response.computedString);
+	    } else {
+	      alert('There was a problem with the request.');
+	    }
+	  }
+	}
 	</script>
 </body>
 </html>

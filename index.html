@@ -3,6 +3,11 @@
 <head>
 	<title>ajax</title>
 	<meta charset="utf-8">
+	<!-- 
+		增加相应头
+		来源：http://www.cnblogs.com/go-jzg/p/4594723.html
+	-->
+	<meta http-equiv="Access-Control-Allow-Origin" content="*">
 </head>
 <body>
 	<h1>
@@ -11,10 +16,13 @@
 	<input  id="text" placeholder="Try Something" required>
 	<button id = "ajaxButton">research</button>
 	<div class = "content"></div>
+
 	<script type="text/javascript">
+	//problem:
+	//已拦截跨源请求：同源策略禁止读取位于str(url)的资源
 		var httpRequest;
 
-		function alertContents(argument) {
+		function alertContents() {
 			if (httpRequest.readyState === XMLHttpRequest.DONE) {
 			    // everything is good, the response is received
 			    if (httpRequest.status === 200) {
@@ -37,7 +45,7 @@
 
 		document.getElementById('ajaxButton').addEventListener('click',function(){makeRequest(str)});
 		function makeRequest(url){
-			console.log("begin of makeRequest")
+			console.log("begin of makeRequest");
 
 			httpRequest = new XMLHttpRequest();
 
@@ -47,7 +55,7 @@
 			}
 
 			httpRequest.onreadystatechange = alertContents;
-			httpRequest.open('GET', str, true);
+			httpRequest.open('POST', url, true); //this should be url instead of str!!!
 			httpRequest.send();
 		}
 	</script>
