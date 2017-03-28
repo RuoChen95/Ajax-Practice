@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ajax</title>
+	<meta charset="utf-8">
+</head>
+<body>
+	<h1>
+		the simple ajax practice
+	</h1>
+	<input  id="text" placeholder="Try Something" required>
+	<button id = "ajaxButton">research</button>
+	<div class = "content"></div>
+	<script type="text/javascript">
+		var httpRequest;
+
+		function alertContents(argument) {
+			if (httpRequest.readyState === XMLHttpRequest.DONE) {
+			    // everything is good, the response is received
+			    if (httpRequest.status === 200) {
+				    // perfect!
+				    console.log(httpRequest.responseText); //returns the server response as a string of text
+				} else {
+				    // there was a problem with the request,
+				    // for example the response may contain a 404 (Not Found)
+				    // or 500 (Internal Server Error) response code
+				    console.log("httpRequest.status is not 200")
+				}
+			} else {
+			    console.log("there are some problem in HTMLHttpRequest")// still not ready
+			}
+		}
+
+		var str = "";
+		value = document.getElementById('text').value;
+		str = "https://en.wikipedia.org/w/api.php?format=json&action=query&generator=search&gsrnamespace=0&gsrlimit=10&prop=pageimages|extracts&pilimit=max&exintro&explaintext&exsentences=1&exlimit=max&gsrsearch=" + value + "&callback=?";
+
+		document.getElementById('ajaxButton').addEventListener('click',function(){makeRequest(str)});
+		function makeRequest(url){
+			console.log("begin of makeRequest")
+
+			httpRequest = new XMLHttpRequest();
+
+			if(!httpRequest){
+				console.log("giving up");
+				return false;
+			}
+
+			httpRequest.onreadystatechange = alertContents;
+			httpRequest.open('GET', str, true);
+			httpRequest.send();
+		}
+	</script>
+</body>
+</html>
